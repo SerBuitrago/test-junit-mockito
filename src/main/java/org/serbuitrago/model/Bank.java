@@ -25,5 +25,6 @@ public class Bank {
 	
 	void addAccount(Account account) {
 		this.accounts.add(account);
+		account.bank(this);
 	}
 }

@@ -26,10 +26,10 @@ public class BankTest {
 		Account destination = new Account("Jonatan Javier Barrios Buitrago", new BigDecimal("100.000"));
 		BigDecimal value = new BigDecimal("50.000");
 		
+		bank.toTransfer(origin, destination, value);
+		
 		Integer expectedOrigin =  150;
 		Integer expectedDestination = 150;
-		
-		bank.toTransfer(origin, destination, value);
 		
 		assertEquals(expectedOrigin, origin.getMoney().intValue());
 		assertEquals(expectedDestination, destination.getMoney().intValue());	
