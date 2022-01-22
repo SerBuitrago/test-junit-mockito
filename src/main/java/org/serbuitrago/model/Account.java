@@ -12,7 +12,6 @@ import lombok.Getter;
 public class Account {
 	
 	private String name;
-	private String subname;
 	private BigDecimal money;
 	
 	void debit(BigDecimal money) {
