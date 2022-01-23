@@ -5,12 +5,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class BankTest {
 	
-	Bank bank = new Bank("SerBuitrago");
+	Bank bank;
+	
+	@BeforeEach
+	void beforeEach() {
+		System.out.println("Bank - @BeforeEach");
+		this.bank = new Bank("SerBuitrago");
+	}
+	
+	@AfterEach
+	void afterEach() {
+		System.out.println("Bank - @AfterEach");
+	}
 	
 	@Test
 	@DisplayName("Probando el nombre del banco.")
@@ -23,7 +36,7 @@ public class BankTest {
 	}
 	
 	@Test
-	@DisplayName("Probando la tranferencia dl banco.")
+	@DisplayName("Probando la tranferencia del banco.")
 	void toTransfer() {
 		Account origin = new Account("Sergio Stives Barrios Buitrago", new BigDecimal("200.000"));
 		Account destination = new Account("Jonatan Javier Barrios Buitrago", new BigDecimal("100.000"));
