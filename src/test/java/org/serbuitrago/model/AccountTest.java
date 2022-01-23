@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 
@@ -26,6 +27,7 @@ public class AccountTest {
 	@Test
 	@DisplayName("Probando la plata de la cuenta.")
 	void getMoney() {
+		fail();
 		BigDecimal actual = account.getMoney();
 		BigDecimal expected = BigDecimal.TEN;
 
