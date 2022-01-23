@@ -13,7 +13,7 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.condition.OS;
 
-public class EnableTest {
+public class EnabledTest {
 	
 	@Test
 	@Disabled
