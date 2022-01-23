@@ -2,6 +2,8 @@ package org.serbuitrago.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 import java.math.BigDecimal;
 
@@ -47,6 +49,36 @@ public class BankTest {
 		
 		assertNotNull(actual);
 		assertEquals(expected, actual);
+	}
+	
+	@Test
+	@DisplayName("Probando el nombre del banco con una condicion si el proyecto esta en desarrollo.")
+	void getNameIsDev() {
+		boolean isDev = "dev".equals(System.getProperty("ENV"));
+		assumeTrue(isDev);
+		
+		String expected =  "SerBuitrago";
+		String actual = this.bank.getName();
+		
+		assertNotNull(actual);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	@DisplayName("Probando el nombre del banco con una condicion si el proyecto esta en desarrollo y una funcion lambda.")
+	void getNameIsDevThat() {
+		boolean isDev = "dev".equals(System.getProperty("ENV"));
+		
+		String actual = this.bank.getName();
+		
+		assumingThat(isDev, () -> {
+			String expected =  "SerBuitrago";
+			
+			assertNotNull(actual);
+			assertEquals(expected, actual);
+		});	
+		
+		assertNotNull(actual);
 	}
 	
 	@Test
