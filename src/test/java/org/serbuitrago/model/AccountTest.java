@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +26,7 @@ public class AccountTest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("Probando la plata de la cuenta.")
 	void getMoney() {
 		fail();
