@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class BankTest {
@@ -12,6 +13,7 @@ public class BankTest {
 	Bank bank = new Bank("SerBuitrago");
 	
 	@Test
+	@DisplayName("Probando el nombre del banco.")
 	void getName() {
 		String expected =  "SerBuitrago";
 		String actual = this.bank.getName();
@@ -21,6 +23,7 @@ public class BankTest {
 	}
 	
 	@Test
+	@DisplayName("Probando la tranferencia dl banco.")
 	void toTransfer() {
 		Account origin = new Account("Sergio Stives Barrios Buitrago", new BigDecimal("200.000"));
 		Account destination = new Account("Jonatan Javier Barrios Buitrago", new BigDecimal("100.000"));
@@ -36,6 +39,7 @@ public class BankTest {
 	}
 	
 	@Test
+	@DisplayName("Probando relacion entre el banco y cuenta.")
 	void addAccount() {
 		Account account = new Account("Sergio Stives Barrios Buitrago", new BigDecimal("200.000"));
 		bank.addAccount(account);

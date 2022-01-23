@@ -2,12 +2,12 @@ package org.serbuitrago.model;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class AccountTest {
@@ -15,6 +15,7 @@ public class AccountTest {
 	Account account = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
 
 	@Test
+	@DisplayName("Probando el nombre de la cuenta.")
 	void getName() {
 		String actual = account.getName();
 		String expected = "Sergio Stives Barrios Buitrago";
@@ -23,6 +24,7 @@ public class AccountTest {
 	}
 
 	@Test
+	@DisplayName("Probando la plata de la cuenta.")
 	void getMoney() {
 		BigDecimal actual = account.getMoney();
 		BigDecimal expected = BigDecimal.TEN;
@@ -31,14 +33,7 @@ public class AccountTest {
 	}
 
 	@Test
-	void referenceMoney() {
-		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
-		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
-
-		assertNotEquals(accountOne, accountTwo);
-	}
-
-	@Test
+	@DisplayName("Probando el debito de la cuenta.")
 	void debit() {
 		Account account = new Account("Sergio Stives Barrios Buitrago", new BigDecimal("1000.02"));
 		account.debit(new BigDecimal("100"));
@@ -51,6 +46,7 @@ public class AccountTest {
 	}
 
 	@Test
+	@DisplayName("Probando el credito de la cuenta.")
 	void credit() {
 		Account account = new Account("Sergio Stives Barrios Buitrago", new BigDecimal("1000.02"));
 		account.credit(new BigDecimal("100"));
@@ -63,48 +59,7 @@ public class AccountTest {
 	}
 
 	@Test
-	void referenceBank() {
-		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
-		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
-
-		Bank bank = new Bank("SerBuitrago");
-		bank.addAccount(accountOne);
-		bank.addAccount(accountTwo);
-
-		String actual = accountOne.getBank().getName();
-		String expected = "SerBuitrago";
-
-		assertNotNull(accountOne.getBank());
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	void referenceBankStreamFilter() {
-		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
-
-		Bank bank = new Bank("SerBuitrago");
-		bank.addAccount(accountOne);
-
-		String actual = bank.getAccounts().stream().filter(a -> a.getName().equals(accountOne.getName())).findFirst()
-				.get().getName();
-		String expected = "Sergio Stives Barrios Buitrago";
-
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	void referenceBankStreamMatch() {
-		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
-
-		Bank bank = new Bank("SerBuitrago");
-		bank.addAccount(accountOne);
-
-		String expected = "Sergio Stives Barrios Buitrago";
-
-		assertTrue(bank.getAccounts().stream().anyMatch(a -> a.getName().equals(expected)));
-	}
-
-	@Test
+	@DisplayName("Probando la relacion entre la cuenta y banco.")
 	void referenceBankAssertAll() {
 		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
 		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
@@ -131,6 +86,7 @@ public class AccountTest {
 	}
 
 	@Test
+	@DisplayName("Probando mensajes personalizados y la relacion entre la cuenta y banco.")
 	void referenceBankAssertAllMessage() {
 		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
 		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
@@ -160,6 +116,7 @@ public class AccountTest {
 	}
 
 	@Test
+	@DisplayName("Probando mensajes personalizados con lambda y la relacion entre la cuenta y banco.")
 	void referenceBankAssertAllLambdaMessage() {
 		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
 		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
