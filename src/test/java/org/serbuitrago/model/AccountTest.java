@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +29,16 @@ public class AccountTest {
 	@AfterEach
 	void afterEach() {
 		System.out.println("Account - @AfterEach");
+	}
+	
+	@BeforeAll
+	static void beforeAll() {
+		System.out.println("Account - @BeforeAll");
+	}
+	
+	@AfterAll
+	static void afterAll() {
+		System.out.println("Account - @AfterAll");
 	}
 
 	@Test
