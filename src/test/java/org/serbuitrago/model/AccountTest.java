@@ -1,5 +1,6 @@
 package org.serbuitrago.model;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -90,16 +91,42 @@ public class AccountTest {
 
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	void referenceBankStreamMatch() {
 		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
 
 		Bank bank = new Bank("SerBuitrago");
 		bank.addAccount(accountOne);
-		
+
 		String expected = "Sergio Stives Barrios Buitrago";
 
 		assertTrue(bank.getAccounts().stream().anyMatch(a -> a.getName().equals(expected)));
+	}
+
+	@Test
+	void referenceBankAssertAll() {
+		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
+		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
+
+		Bank bank = new Bank("SerBuitrago");
+		bank.addAccount(accountOne);
+		bank.addAccount(accountTwo);
+
+		String expectedBank = "SerBuitrago";
+		String expectedName = "Sergio Stives Barrios Buitrago";
+
+		assertAll(() -> {
+			assertNotNull(accountOne.getBank());
+			assertNotNull(accountTwo.getBank());
+		}, () -> {
+			assertEquals(expectedBank, accountOne.getBank().getName());
+			assertEquals(expectedBank, accountTwo.getBank().getName());
+		}, () -> {
+			assertEquals(expectedName, bank.getAccounts().stream().filter(a -> a.getName().equals(accountOne.getName()))
+					.findFirst().get().getName());
+		}, () -> {
+			assertTrue(bank.getAccounts().stream().anyMatch(a -> a.getName().equals(expectedName)));
+		});
 	}
 }
