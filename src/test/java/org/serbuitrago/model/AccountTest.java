@@ -129,4 +129,33 @@ public class AccountTest {
 			assertTrue(bank.getAccounts().stream().anyMatch(a -> a.getName().equals(expectedName)));
 		});
 	}
+
+	@Test
+	void referenceBankAssertAllMessage() {
+		Account accountOne = new Account("Sergio Stives Barrios Buitrago", BigDecimal.TEN);
+		Account accountTwo = new Account("Jonatan Javier Barrios Buitrago", BigDecimal.ONE);
+
+		Bank bank = new Bank("SerBuitrago");
+		bank.addAccount(accountOne);
+		bank.addAccount(accountTwo);
+
+		String expectedBank = "SerBuitrago";
+		String expectedName = "Sergio Stives Barrios Buitrago";
+
+		assertAll(() -> {
+			assertNotNull(accountOne.getBank(), "El banco no puede estar nulo en la cuenta 1.");
+			assertNotNull(accountTwo.getBank(), "El banco no puede estar nulo en la cuenta 2.");
+		}, () -> {
+			assertEquals(expectedBank, accountOne.getBank().getName(),
+					"El nombre del banco no es el esperado en la cuenta 1.");
+			assertEquals(expectedBank, accountTwo.getBank().getName(),
+					"El nombre del banco no es el esperado en la cuenta 2.");
+		}, () -> {
+			assertEquals(expectedName, bank.getAccounts().stream().filter(a -> a.getName().equals(accountOne.getName()))
+					.findFirst().get().getName(), "El nombre de la cuenta no fue el esperado.");
+		}, () -> {
+			assertTrue(bank.getAccounts().stream().anyMatch(a -> a.getName().equals(expectedName)),
+					"El nombre de la cuenta no fue el esperado.");
+		});
+	}
 }
