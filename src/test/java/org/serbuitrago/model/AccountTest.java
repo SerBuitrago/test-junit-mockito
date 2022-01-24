@@ -140,9 +140,9 @@ public class AccountTest {
 			assertNotNull(account.getMoney());
 			assertEquals(expected, actual);
 		}
-		
+
 		@ParameterizedTest
-		@ValueSource(strings = {"100", "200", "300", "400", "500"})
+		@ValueSource(strings = { "100", "200", "300", "400", "500" })
 		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas.")
 		void debitParameterizedTest(String value) {
 			account.debit(new BigDecimal(value));
@@ -150,29 +150,62 @@ public class AccountTest {
 			assertNotNull(account.getMoney());
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 		}
-		
+
 		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas.")
 		@ParameterizedTest(name = "Numero {index} ejecutando con valor {0} - {argumentsWithNames}")
-		@ValueSource(strings = {"100", "200", "300", "400", "500"})
+		@ValueSource(strings = { "100", "200", "300", "400", "500" })
 		void debitParameterizedTestMessage(String value) {
 			account.debit(new BigDecimal(value));
 
 			assertNotNull(account.getMoney());
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
-		}	
-		
+		}
+
 		@ParameterizedTest
-		@CsvSource({"1,100", "2,200", "3,300", "4,400", "5,500"})
+		@CsvSource({ "1,100", "2,200", "3,300", "4,400", "5,500" })
 		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y csv source.")
 		void debitCsvSource(String index, String value) {
-			System.out.println(index+ " -> "+value);
+			System.out.println(index + " -> " + value);
 
 			account.debit(new BigDecimal(value));
 
 			assertNotNull(account.getMoney());
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 		}
-		
+
+		@ParameterizedTest
+		@CsvSource({ "200,100", "250,200", "305,300", "500,400", "501,500" })
+		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y csv source II.")
+		void debitCsvSourceII(String money, String value) {
+			System.out.println("Money: " + money + " - " + value);
+
+			account.setMoney(new BigDecimal(money));
+			account.debit(new BigDecimal(value));
+
+			assertNotNull(account.getMoney());
+			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+		}
+
+		@ParameterizedTest
+		@CsvSource({ "200,100,Sergio,Sergio,Nequi,Nequi", "250,200,Andres,Andres,Bancolombia,Bancolombia",
+				"305,300,Jose,Jose,Bancolombia,Bancolombia", "500,400,Maria,Maria,DaviPlata,DaviPlata",
+				"501,500,Claudia,Claudia,Banco Agrario,Banco Agrario" })
+		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y csv source III.")
+		void debitCsvSourceIII(String money, String value, String name, String nameExpected, String nameBank,
+				String nameBankExpected) {
+			System.out.println("El usuario " +name +" tiene en el banco " + nameBank +  " $" + money + " va hacer un debito de $" + value);
+
+			account.setName(name);
+			account.setBank(new Bank(nameBank));
+			account.setMoney(new BigDecimal(money));
+			account.debit(new BigDecimal(value));
+
+			assertNotNull(account.getMoney());
+			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+			assertEquals(nameExpected, account.getName());
+			assertEquals(nameBankExpected, account.getBank().getName());
+		}
+
 		@ParameterizedTest
 		@CsvFileSource(resources = "/data.csv")
 		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y csv file source.")
@@ -183,7 +216,7 @@ public class AccountTest {
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 		}
 	}
-	
+
 	@ParameterizedTest
 	@MethodSource("toList")
 	@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y method source.")
@@ -193,11 +226,11 @@ public class AccountTest {
 		assertNotNull(account.getMoney());
 		assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 	}
-	
-	static List<String> toList(){
+
+	static List<String> toList() {
 		return java.util.Arrays.asList("100", "200", "300", "400", "500");
 	}
-	
+
 	@Nested
 	@DisplayName("Clase que permite probar la operacion credito de la cuenta.")
 	class AccountOperationCredit {
