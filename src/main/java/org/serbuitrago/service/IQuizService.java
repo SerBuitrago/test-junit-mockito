@@ -1,8 +1,12 @@
 package org.serbuitrago.service;
 
+import java.util.Optional;
+
 import org.serbuitrago.model.Quiz;
 
 public interface IQuizService {
 	
-	Quiz findByName(String name);
+	Optional<Quiz> findByName(String name);
+	
+	Quiz findQuizByName(String name);
 }

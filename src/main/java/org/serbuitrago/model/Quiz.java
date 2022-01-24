@@ -15,10 +15,6 @@ public class Quiz {
 	private String name;
 	private List<String> quiestions;
 
-	public Quiz() {
-		this(0L, null, new ArrayList<>());
-	}
-
 	public Quiz(Long id, String name) {
 		this(id, name, new ArrayList<>());
 	}
