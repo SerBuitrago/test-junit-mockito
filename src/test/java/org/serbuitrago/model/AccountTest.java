@@ -215,6 +215,24 @@ public class AccountTest {
 			assertNotNull(account.getMoney());
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 		}
+		
+		@ParameterizedTest
+		@CsvFileSource(resources = "/dataII.csv")
+		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y csv file source II.")
+		void debitCsvFileSourceII(String money, String value, String name, String nameExpected, String nameBank,
+				String nameBankExpected) {
+			System.out.println("El usuario " +name +" tiene en el banco " + nameBank +  " $" + money + " va hacer un debito de $" + value);
+
+			account.setName(name);
+			account.setBank(new Bank(nameBank));
+			account.setMoney(new BigDecimal(money));
+			account.debit(new BigDecimal(value));
+
+			assertNotNull(account.getMoney());
+			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+			assertEquals(nameExpected, account.getName());
+			assertEquals(nameBankExpected, account.getBank().getName());
+		}
 	}
 
 	@ParameterizedTest
