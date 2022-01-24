@@ -19,7 +19,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -42,6 +44,9 @@ public class QuizServiceTest {
 
 	@InjectMocks
 	QuizService iQuizService;
+	
+	@Captor
+	ArgumentCaptor<Long> captor;
 
 	Long VALUE_FIND_BY_ID = 1L;
 	String VALUE_FIND_BY_NAME = "Matematica";
@@ -151,56 +156,79 @@ public class QuizServiceTest {
 			});
 
 			assertEquals(IllegalArgumentException.class, exception.getClass());
-			
+
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(null);
 		}
 	}
-	
+
 	@Tag("matchers")
 	@Nested
 	@DisplayName("Clase prueba los argumentos matchers.")
-	class QuizServiceTestMatchers{
-		
+	class QuizServiceTestMatchers {
+
 		@Test
 		@DisplayName("Probando matchers.")
 		void matchers() {
 			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
 			when(iQuestionRepository.findQuestionByQuizId(anyLong())).thenReturn(DATA_LIST_QUESTION);
-			
+
 			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
-			
+
 			verify(iQuizRepository).findAll();
-			verify(iQuestionRepository).findQuestionByQuizId(argThat(arg ->  arg.equals(VALUE_FIND_BY_ID)));
+			verify(iQuestionRepository).findQuestionByQuizId(argThat(arg -> arg.equals(VALUE_FIND_BY_ID)));
 		}
-		
+
 		@Test
 		@DisplayName("Probando matchers con ArgumentMatcher.")
 		void matchersII() {
 			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
 			when(iQuestionRepository.findQuestionByQuizId(anyLong())).thenReturn(DATA_LIST_QUESTION);
-			
+
 			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
-			
+
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(argThat(new ArgsMatchersTest()));
 		}
-		
+
 	}
-	
+
+	@Tag("capture")
+	@Nested
+	@DisplayName("Clase prueba la captura de argumentos.")
+	class QuizServiceTestCapture {
+		
+		@Test
+		@DisplayName("Probando la captura.")
+		void capture() {
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
+			when(iQuestionRepository.findQuestionByQuizId(anyLong())).thenReturn(DATA_LIST_QUESTION);
+			
+			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			
+			//ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
+
+			verify(iQuizRepository).findAll();
+			verify(iQuestionRepository).findQuestionByQuizId(captor.capture());
+			
+			assertEquals(VALUE_FIND_BY_ID, captor.getValue());
+		}
+	}
+
 	static class ArgsMatchersTest implements ArgumentMatcher<Long> {
-		
+
 		private Long argument;
-		
+
 		@Override
 		public boolean matches(Long argument) {
 			this.argument = argument;
 			return argument != null && argument > 0;
 		}
-		
+
 		@Override
 		public String toString() {
-		 return "Es para un mensaje personalizando de error que imprime mockito en caso de que falle el test del id "+argument+".";
+			return "Es para un mensaje personalizando de error que imprime mockito en caso de que falle el test del id "
+					+ argument + ".";
 		}
 	}
 }
