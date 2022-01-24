@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QuizService implements IQuizService{
 	
-	private IQuizRepository iQuizRepository;
+	private final IQuizRepository iQuizRepository;
 	
 	@Override
 	public Quiz findByName(String name) {
