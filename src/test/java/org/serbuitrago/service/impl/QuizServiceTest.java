@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -151,6 +154,53 @@ public class QuizServiceTest {
 			
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(null);
+		}
+	}
+	
+	@Tag("matchers")
+	@Nested
+	@DisplayName("Clase prueba los argumentos matchers.")
+	class QuizServiceTestMatchers{
+		
+		@Test
+		@DisplayName("Probando matchers.")
+		void matchers() {
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
+			when(iQuestionRepository.findQuestionByQuizId(anyLong())).thenReturn(DATA_LIST_QUESTION);
+			
+			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			
+			verify(iQuizRepository).findAll();
+			verify(iQuestionRepository).findQuestionByQuizId(argThat(arg ->  arg.equals(VALUE_FIND_BY_ID)));
+		}
+		
+		@Test
+		@DisplayName("Probando matchers con ArgumentMatcher.")
+		void matchersII() {
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
+			when(iQuestionRepository.findQuestionByQuizId(anyLong())).thenReturn(DATA_LIST_QUESTION);
+			
+			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			
+			verify(iQuizRepository).findAll();
+			verify(iQuestionRepository).findQuestionByQuizId(argThat(new ArgsMatchersTest()));
+		}
+		
+	}
+	
+	static class ArgsMatchersTest implements ArgumentMatcher<Long> {
+		
+		private Long argument;
+		
+		@Override
+		public boolean matches(Long argument) {
+			this.argument = argument;
+			return argument != null && argument > 0;
+		}
+		
+		@Override
+		public String toString() {
+		 return "Es para un mensaje personalizando de error que imprime mockito en caso de que falle el test del id "+argument+".";
 		}
 	}
 }
