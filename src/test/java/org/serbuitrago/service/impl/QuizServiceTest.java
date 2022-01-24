@@ -2,7 +2,6 @@ package org.serbuitrago.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,33 +12,37 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+//import org.mockito.MockitoAnnotations;
 import org.serbuitrago.model.Quiz;
 import org.serbuitrago.repository.IQuestionRepository;
 import org.serbuitrago.repository.IQuizRepository;
-import org.serbuitrago.service.IQuizService;
 
 import static org.serbuitrago.Data.*;
 
+@ExtendWith(MockitoExtension.class)
 public class QuizServiceTest {
 
+	@Mock
 	IQuizRepository iQuizRepository;
+	@Mock
 	IQuestionRepository iQuestionRepository;
 
-	IQuizService iQuizService;
+	@InjectMocks
+	QuizService iQuizService;
 	 
 	Long VALUE_FIND_BY_ID = 1L;
 	String VALUE_FIND_BY_NAME = "Matematica";
 	String VALUE_FIND_BY_NAME_QUESTION = "Derivadas";
 
-	@BeforeEach
-	void beforeEach() {
-		iQuizRepository = mock(IQuizRepository.class);
-		iQuestionRepository = mock(IQuestionRepository.class);
-
-		iQuizService = new QuizService(iQuizRepository, iQuestionRepository);
+	@BeforeEach 
+	void beforeEach() {	
+		//MockitoAnnotations.openMocks(this);
 		
 		when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
-		when(iQuestionRepository.findQuestionByQuizId(VALUE_FIND_BY_ID)).thenReturn(DATA_LIST_QUESTION);
 	}
 
 	@Tag("quiz")
@@ -59,6 +62,13 @@ public class QuizServiceTest {
 	@Nested
 	@DisplayName("Clase prueba las preguntas del quiz.")
 	class QuizServiceTestFindQuestion {
+		
+		@BeforeEach 
+		void beforeEach() {	
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
+			when(iQuestionRepository.findQuestionByQuizId(VALUE_FIND_BY_ID)).thenReturn(DATA_LIST_QUESTION);
+		}
+		
 		@Test
 		@DisplayName("Consulta preguntas por el nombre del quiz.")
 		void findQuizByName() {
@@ -69,7 +79,7 @@ public class QuizServiceTest {
 		
 		@Test
 		@DisplayName("Consulta preguntas por el nombre del quiz y verifica que se ha llamado el metodo.")
-		void findQuizByNameVerify() {
+		void findQuizByNameVerify() {	
 			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(VALUE_FIND_BY_ID);
