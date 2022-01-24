@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.TestInstance;
 
@@ -42,6 +43,7 @@ public class BankTest {
 		System.out.println("Bank - @AfterAll");
 	}
 
+	@Tag("Bank")
 	@Nested
 	@DisplayName("Clase que permite probar el nombre del banco.")
 	class BankName {
@@ -86,6 +88,7 @@ public class BankTest {
 		}
 	}
 
+	@Tag("Tansfer")
 	@Nested
 	@DisplayName("Clase que permite probar la tranferencia de dinero.")
 	class BankTransfer {
@@ -106,6 +109,8 @@ public class BankTest {
 		}
 	}
 
+	@Tag("Account")
+	@Tag("Bank")
 	@Nested
 	@DisplayName("Clase que permite probar la relacion entre banco y cuenta.")
 	class BankAccount {

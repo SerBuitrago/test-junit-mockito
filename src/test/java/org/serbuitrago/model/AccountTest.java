@@ -18,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -52,6 +53,7 @@ public class AccountTest {
 		System.out.println("Account - @AfterAll");
 	}
 
+	@Tag("Account")
 	@Nested
 	@DisplayName("Clase que permite probar el nombre de la cuenta.")
 	class AccountName {
@@ -111,6 +113,7 @@ public class AccountTest {
 		}
 	}
 
+	@Tag("Account")
 	@Nested
 	@DisplayName("Clase que permite probar el dinero de la cuenta.")
 	class AccountMoney {
@@ -126,6 +129,8 @@ public class AccountTest {
 		}
 	}
 
+	@Tag("Account")
+	@Tag("Debit")
 	@Nested
 	@DisplayName("Clase que permite probar la operacion debito de la cuenta.")
 	class AccountOperationDebit {
@@ -235,6 +240,8 @@ public class AccountTest {
 		}
 	}
 
+	@Tag("Account")
+	@Tag("Debit")
 	@ParameterizedTest
 	@MethodSource("toList")
 	@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y method source.")
@@ -249,6 +256,8 @@ public class AccountTest {
 		return java.util.Arrays.asList("100", "200", "300", "400", "500");
 	}
 
+	@Tag("Account")
+	@Tag("Credit")
 	@Nested
 	@DisplayName("Clase que permite probar la operacion credito de la cuenta.")
 	class AccountOperationCredit {
@@ -265,6 +274,8 @@ public class AccountTest {
 		}
 	}
 
+	@Tag("Account")
+	@Tag("Bank")
 	@Nested
 	class AccountOther {
 		@Test
