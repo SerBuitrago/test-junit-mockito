@@ -3,6 +3,7 @@ package org.serbuitrago.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -64,6 +65,14 @@ public class QuizServiceTest {
 			Quiz quiz = iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
 			assertEquals(DATA_LIST_QUESTION.size(), quiz.getQuiestions().size());
 			assertTrue(quiz.getQuiestions().contains(VALUE_FIND_BY_NAME_QUESTION));
+		}
+		
+		@Test
+		@DisplayName("Consulta preguntas por el nombre del quiz y verifica que se ha llamado el metodo.")
+		void findQuizByNameVerify() {
+			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			verify(iQuizRepository).findAll();
+			verify(iQuestionRepository).findQuestionByQuizId(VALUE_FIND_BY_ID);
 		}
 	}
 }
