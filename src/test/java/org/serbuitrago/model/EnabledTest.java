@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.api.condition.DisabledOnJre;
@@ -24,6 +25,7 @@ public class EnabledTest {
 	}
 
 	@Nested
+	@Tag("Enable")
 	class EnabledSO {
 		@Test
 		@EnabledOnOs(OS.WINDOWS)
@@ -45,6 +47,7 @@ public class EnabledTest {
 	}
 
 	@Nested
+	@Tag("Enable")
 	class EnabledJava {
 		@Test
 		@EnabledOnJre(JRE.JAVA_8)
@@ -84,6 +87,7 @@ public class EnabledTest {
 	}
 
 	@Nested
+	@Tag("Enable")
 	class EnabledSystemProperty {
 		@Test
 		@EnabledIfSystemProperty(named = "java.version", matches = "17.0.1")

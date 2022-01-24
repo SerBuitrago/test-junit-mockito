@@ -44,8 +44,19 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<groups>Account</groups>
+					<groups>Bank</groups>
+					<groups>Debit</groups>
+					<groups>Credit</groups>
+					<groups>Tansfer</groups>
+					<groups>Second</groups>
+					<groups>Milisecond</groups>
+					<groups>Assert</groups>
+					<groups>Enable</groups>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
