@@ -20,6 +20,8 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -31,10 +33,16 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class AccountTest {
 
 	Account account;
+	
+	private TestInfo testInfo;
+	private TestReporter reporter;
 
 	@BeforeEach
-	void beforeEach() {
+	void beforeEach(TestInfo testInfo, TestReporter reporter) {
 		System.out.println("Account - @BeforeEach");
+		System.out.println("\nEjecutando: "+testInfo.getDisplayName() +" " +testInfo.getTestMethod().orElse(null).getName());
+		this.testInfo =  testInfo;
+		this.reporter = reporter;
 		this.account = new Account("Sergio Stives Barrios Buitrago", new BigDecimal("1000.02"));
 	}
 
@@ -62,8 +70,12 @@ public class AccountTest {
 		void getName() {
 			String actual = account.getName();
 			String expected = "Sergio Stives Barrios Buitrago";
-
-			assertEquals(expected, actual);
+	
+			if(testInfo.getTags().contains("Account")) {
+				System.out.println("------------- Etiqueta Encontrada --------");
+				assertEquals(expected, actual);
+			}else
+				System.out.println("------------- No contiene la etiqueta --------");
 		}
 
 		@RepeatedTest(5)
@@ -88,7 +100,7 @@ public class AccountTest {
 		@RepeatedTest(value = 5, name = "{displayName} - Repetición numero {currentRepetition} de {totalRepetitions}")
 		void getNameRepetition(RepetitionInfo repetitionInfo) {
 			String actual = account.getName();
-			String expected = "Sergio Stives Barrios Buitrago";
+			String expected = "Sergio Stives Barrios Buitrago"; 
 			switch (repetitionInfo.getCurrentRepetition()) {
 			case 1:
 				System.out.println("Estamos en la prueba 1.....");
@@ -126,7 +138,7 @@ public class AccountTest {
 			BigDecimal expected = new BigDecimal("1000.02");
 
 			assertEquals(expected, actual);
-		}
+		} 
 	}
 
 	@Tag("Account")
