@@ -9,4 +9,6 @@ public interface IQuizService {
 	Optional<Quiz> findByName(String name);
 	
 	Quiz findQuizByName(String name);
+	
+	Quiz save(Quiz quiz);
 }

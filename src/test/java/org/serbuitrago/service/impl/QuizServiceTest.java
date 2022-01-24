@@ -1,7 +1,10 @@
 package org.serbuitrago.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,14 +44,18 @@ public class QuizServiceTest {
 	@BeforeEach 
 	void beforeEach() {	
 		//MockitoAnnotations.openMocks(this);
-		
-		when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
 	}
 
 	@Tag("quiz")
 	@Nested
 	@DisplayName("Clase prueba nombre del quiz.")
 	class QuizServiceTestFindByName {
+		
+		@BeforeEach 
+		void beforeEach() {	
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
+		}
+		
 		@Test
 		@DisplayName("Consulta por el nombre.")
 		void findByName() {
@@ -73,6 +80,7 @@ public class QuizServiceTest {
 		@DisplayName("Consulta preguntas por el nombre del quiz.")
 		void findQuizByName() {
 			Quiz quiz = iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			
 			assertEquals(DATA_LIST_QUESTION.size(), quiz.getQuiestions().size());
 			assertTrue(quiz.getQuiestions().contains(VALUE_FIND_BY_NAME_QUESTION));
 		}
@@ -81,8 +89,33 @@ public class QuizServiceTest {
 		@DisplayName("Consulta preguntas por el nombre del quiz y verifica que se ha llamado el metodo.")
 		void findQuizByNameVerify() {	
 			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(VALUE_FIND_BY_ID);
+		}
+	}
+	
+	@Tag("quiz")
+	@Tag("question")
+	@Nested
+	@DisplayName("Clase prueba el registro del quiz y preguntas del mismo.")
+	class QuizServiceTestSave{
+		
+		@BeforeEach 
+		void beforeEach() {	
+			when(iQuizRepository.save(any(Quiz.class))).thenReturn(DATA_QUIZ);
+		}
+		
+		@Test
+		@DisplayName("Registra un quiz")
+		void save(){
+			Quiz quiz = iQuizRepository.save(DATA_QUIZ);
+			
+			assertNotNull(quiz);
+			assertEquals(DATA_QUIZ.getId(), quiz.getId());
+			
+			verify(iQuizRepository).save(any(Quiz.class));
+			verify(iQuestionRepository).save(anyList());
 		}
 	}
 }

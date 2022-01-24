@@ -13,4 +13,8 @@ public class Data {
 
 	public static final List<String> DATA_LIST_QUESTION = Arrays.asList("Suma", "Resta", "Derivadas", "Integrales",
 			"Ecuaciones diferenciales");
+	
+	
+	public static final Quiz DATA_QUIZ = new Quiz(13L, "Calculo Vectorial", DATA_LIST_QUESTION);
+	
 }

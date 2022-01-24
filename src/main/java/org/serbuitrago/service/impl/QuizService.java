@@ -32,4 +32,12 @@ public class QuizService implements IQuizService {
 		}
 		return quiz;
 	}
+
+	@Override
+	public Quiz save(Quiz quiz) {
+		if(!quiz.getQuiestions().isEmpty()) {
+			iQuestionRepository.save(quiz.getQuiestions());
+		}
+		return iQuizRepository.save(quiz);
+	}
 }
