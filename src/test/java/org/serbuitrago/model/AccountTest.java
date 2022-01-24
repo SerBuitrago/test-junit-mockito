@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 //import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -180,6 +182,20 @@ public class AccountTest {
 			assertNotNull(account.getMoney());
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 		}
+	}
+	
+	@ParameterizedTest
+	@MethodSource("toList")
+	@DisplayName("Probando el debito de la cuenta con varios casos de pruebas y method source.")
+	void debitMethodSource(String value) {
+		account.debit(new BigDecimal(value));
+
+		assertNotNull(account.getMoney());
+		assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+	}
+	
+	static List<String> toList(){
+		return java.util.Arrays.asList("100", "200", "300", "400", "500");
 	}
 	
 	@Nested
