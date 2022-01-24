@@ -18,7 +18,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 //import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.provider.ValueSource;
 
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AccountTest {
@@ -121,8 +123,8 @@ public class AccountTest {
 	}
 
 	@Nested
-	@DisplayName("Clase que permite probar las operaciones de la cuenta.")
-	class AccountOperation {
+	@DisplayName("Clase que permite probar la operacion debito de la cuenta.")
+	class AccountOperationDebit {
 		@Test
 		@DisplayName("Probando el debito de la cuenta.")
 		void debit() {
@@ -134,7 +136,31 @@ public class AccountTest {
 			assertNotNull(account.getMoney());
 			assertEquals(expected, actual);
 		}
+		
+		@ParameterizedTest
+		@ValueSource(strings = {"100", "200", "300", "400", "500"})
+		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas.")
+		void debitParameterizedTest(String value) {
+			account.debit(new BigDecimal(value));
 
+			assertNotNull(account.getMoney());
+			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+		}
+		
+		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas.")
+		@ParameterizedTest(name = "Numero {index} ejecutando con valor {0} - {argumentsWithNames}")
+		@ValueSource(strings = {"100", "200", "300", "400", "500"})
+		void debitParameterizedTestMessage(String value) {
+			account.debit(new BigDecimal(value));
+
+			assertNotNull(account.getMoney());
+			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+		}	
+	}
+	
+	@Nested
+	@DisplayName("Clase que permite probar la operacion credito de la cuenta.")
+	class AccountOperationCredit {
 		@Test
 		@DisplayName("Probando el credito de la cuenta.")
 		void credit() {
