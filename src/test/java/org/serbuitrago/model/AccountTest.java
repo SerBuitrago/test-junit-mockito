@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.TestInstance;
 
@@ -54,6 +56,52 @@ public class AccountTest {
 			String expected = "Sergio Stives Barrios Buitrago";
 
 			assertEquals(expected, actual);
+		}
+
+		@RepeatedTest(5)
+		@DisplayName("Probando el nombre de la cuenta 5 veces.")
+		void getNameFive() {
+			String actual = account.getName();
+			String expected = "Sergio Stives Barrios Buitrago";
+
+			assertEquals(expected, actual);
+		}
+
+		@DisplayName("Probando el nombre de la cuenta 5 veces con mensaje personalizado.")
+		@RepeatedTest(value = 5, name = "{displayName} - Repetición numero {currentRepetition} de {totalRepetitions}")
+		void getNameFiveMessage() {
+			String actual = account.getName();
+			String expected = "Sergio Stives Barrios Buitrago";
+
+			assertEquals(expected, actual);
+		}
+
+		@DisplayName("Probando el nombre de la cuenta 5 veces con mensaje personalizado y casos de prueba.")
+		@RepeatedTest(value = 5, name = "{displayName} - Repetición numero {currentRepetition} de {totalRepetitions}")
+		void getNameRepetition(RepetitionInfo repetitionInfo) {
+			String actual = account.getName();
+			String expected = "Sergio Stives Barrios Buitrago";
+			switch (repetitionInfo.getCurrentRepetition()) {
+			case 1:
+				System.out.println("Estamos en la prueba 1.....");
+				break;
+			case 2:
+				System.out.println("Estamos en la prueba 2.....");
+				assertEquals(expected, actual);
+				break;
+			case 3:
+				System.out.println("Estamos en la prueba 3.....");
+				assertEquals(expected, actual);
+				break;
+			case 4:
+				System.out.println("Estamos en la prueba 4.....");
+				break;
+			default:
+				System.out.println("Estamos en la ultima prueba....");
+				assertEquals(expected, actual);
+				break;
+			}
+
 		}
 	}
 
