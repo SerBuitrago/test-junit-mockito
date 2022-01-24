@@ -2,6 +2,7 @@ package org.serbuitrago.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -18,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 //import org.mockito.MockitoAnnotations;
 import org.serbuitrago.model.Quiz;
 import org.serbuitrago.repository.IQuestionRepository;
@@ -36,26 +39,26 @@ public class QuizServiceTest {
 
 	@InjectMocks
 	QuizService iQuizService;
-	 
+
 	Long VALUE_FIND_BY_ID = 1L;
 	String VALUE_FIND_BY_NAME = "Matematica";
 	String VALUE_FIND_BY_NAME_QUESTION = "Derivadas";
 
-	@BeforeEach 
-	void beforeEach() {	
-		//MockitoAnnotations.openMocks(this);
+	@BeforeEach
+	void beforeEach() {
+		// MockitoAnnotations.openMocks(this);
 	}
 
 	@Tag("quiz")
 	@Nested
 	@DisplayName("Clase prueba nombre del quiz.")
 	class QuizServiceTestFindByName {
-		
-		@BeforeEach 
-		void beforeEach() {	
+
+		@BeforeEach
+		void beforeEach() {
 			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
 		}
-		
+
 		@Test
 		@DisplayName("Consulta por el nombre.")
 		void findByName() {
@@ -69,53 +72,85 @@ public class QuizServiceTest {
 	@Nested
 	@DisplayName("Clase prueba las preguntas del quiz.")
 	class QuizServiceTestFindQuestion {
-		
-		@BeforeEach 
-		void beforeEach() {	
+
+		@BeforeEach
+		void beforeEach() {
 			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
 			when(iQuestionRepository.findQuestionByQuizId(VALUE_FIND_BY_ID)).thenReturn(DATA_LIST_QUESTION);
 		}
-		
+
 		@Test
 		@DisplayName("Consulta preguntas por el nombre del quiz.")
 		void findQuizByName() {
 			Quiz quiz = iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
-			
+
 			assertEquals(DATA_LIST_QUESTION.size(), quiz.getQuiestions().size());
 			assertTrue(quiz.getQuiestions().contains(VALUE_FIND_BY_NAME_QUESTION));
 		}
-		
+
 		@Test
 		@DisplayName("Consulta preguntas por el nombre del quiz y verifica que se ha llamado el metodo.")
-		void findQuizByNameVerify() {	
+		void findQuizByNameVerify() {
 			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
-			
+
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(VALUE_FIND_BY_ID);
 		}
 	}
-	
+
 	@Tag("quiz")
 	@Tag("question")
 	@Nested
 	@DisplayName("Clase prueba el registro del quiz y preguntas del mismo.")
-	class QuizServiceTestSave{
-		
-		@BeforeEach 
-		void beforeEach() {	
-			when(iQuizRepository.save(any(Quiz.class))).thenReturn(DATA_QUIZ);
+	class QuizServiceTestSave {
+
+		@BeforeEach
+		void beforeEach() {
+			// when(iQuizRepository.save(any(Quiz.class))).thenReturn(DATA_QUIZ);
+			when(iQuizRepository.save(any(Quiz.class))).then(new Answer<Quiz>() {
+
+				Long next = DATA_LIST_QUIZ.get(DATA_LIST_QUIZ.size() - 1).getId();
+
+				@Override
+				public Quiz answer(InvocationOnMock invocation) throws Throwable {
+					Quiz quiz = invocation.getArgument(0);
+					quiz.setId(next++);
+					return quiz;
+				}
+			});
 		}
-		
+
 		@Test
 		@DisplayName("Registra un quiz")
-		void save(){
-			Quiz quiz = iQuizRepository.save(DATA_QUIZ);
-			
+		void save() {
+			Quiz quiz = iQuizService.save(DATA_QUIZ);
+
 			assertNotNull(quiz);
-			assertEquals(DATA_QUIZ.getId(), quiz.getId());
-			
+			assertEquals(DATA_LIST_QUIZ.get(DATA_LIST_QUIZ.size() - 1).getId(), quiz.getId());
+
 			verify(iQuizRepository).save(any(Quiz.class));
 			verify(iQuestionRepository).save(anyList());
+		}
+	}
+
+	@Tag("question")
+	@Nested
+	@DisplayName("Clase prueba las preguntas del quiz.")
+	class QuizServiceTestQuestionId {
+		@Test
+		@DisplayName("Probando excepcion.")
+		void exception() {
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ_ID_NULL);
+			when(iQuestionRepository.findQuestionByQuizId(null)).thenThrow(IllegalArgumentException.class);
+
+			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+				iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
+			});
+
+			assertEquals(IllegalArgumentException.class, exception.getClass());
+			
+			verify(iQuizRepository).findAll();
+			verify(iQuestionRepository).findQuestionByQuizId(null);
 		}
 	}
 }
