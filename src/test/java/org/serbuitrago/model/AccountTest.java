@@ -19,6 +19,7 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 //import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -156,6 +157,18 @@ public class AccountTest {
 			assertNotNull(account.getMoney());
 			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
 		}	
+		
+		@ParameterizedTest
+		@CsvSource({"1,100", "2,200", "3,300", "4,400", "5,500"})
+		@DisplayName("Probando el debito de la cuenta con varios casos de pruebas.")
+		void debitCsvSource(String index, String value) {
+			System.out.println(index+ " -> "+value);
+
+			account.debit(new BigDecimal(value));
+
+			assertNotNull(account.getMoney());
+			assertTrue(account.getMoney().compareTo(BigDecimal.ZERO) > 0);
+		}
 	}
 	
 	@Nested
