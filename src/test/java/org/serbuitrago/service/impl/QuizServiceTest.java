@@ -2,6 +2,7 @@ package org.serbuitrago.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,24 +55,16 @@ public class QuizServiceTest {
 	String VALUE_FIND_BY_NAME = "Matematica";
 	String VALUE_FIND_BY_NAME_QUESTION = "Derivadas";
 
-	@BeforeEach
-	void beforeEach() {
-		// MockitoAnnotations.openMocks(this);
-	}
-
 	@Tag("quiz")
 	@Nested
 	@DisplayName("Clase prueba nombre del quiz.")
 	class QuizServiceTestFindByName {
 
-		@BeforeEach
-		void beforeEach() {
-			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
-		}
-
 		@Test
 		@DisplayName("Consulta por el nombre.")
 		void findByName() {
+			when(iQuizRepository.findAll()).thenReturn(DATA_LIST_QUIZ);
+			
 			Optional<Quiz> quiz = iQuizService.findByName(VALUE_FIND_BY_NAME);
 			assertTrue(quiz.isPresent());
 		}
@@ -116,11 +109,8 @@ public class QuizServiceTest {
 
 		@BeforeEach
 		void beforeEach() {
-			// when(iQuizRepository.save(any(Quiz.class))).thenReturn(DATA_QUIZ);
 			when(iQuizRepository.save(any(Quiz.class))).then(new Answer<Quiz>() {
-
 				Long next = DATA_LIST_QUIZ.get(DATA_LIST_QUIZ.size() - 1).getId();
-
 				@Override
 				public Quiz answer(InvocationOnMock invocation) throws Throwable {
 					Quiz quiz = invocation.getArgument(0);
@@ -153,6 +143,18 @@ public class QuizServiceTest {
 			verify(iQuizRepository, never()).findAll();
 			verify(iQuizRepository, times(1)).save(any(Quiz.class));
 			verify(iQuestionRepository, times(1)).save(anyList());
+		}
+		
+		@Test
+		@DisplayName("Registra un quiz y valida con assert same.")
+		void saveTimesAssertSame() {
+			Quiz quizI = iQuizService.save(DATA_QUIZ);
+			Quiz quizII = iQuizService.save(DATA_QUIZ);
+			
+			assertSame(quizI, quizII);
+			assertTrue(quizI == quizII);
+			
+			verify(iQuizRepository, times(2)).save(DATA_QUIZ);
 		}
 	}
 
@@ -221,8 +223,6 @@ public class QuizServiceTest {
 			
 			iQuizService.findQuizByName(VALUE_FIND_BY_NAME);
 			
-			//ArgumentCaptor<Long> captor = ArgumentCaptor.forClass(Long.class);
-
 			verify(iQuizRepository).findAll();
 			verify(iQuestionRepository).findQuestionByQuizId(captor.capture());
 			
@@ -231,9 +231,8 @@ public class QuizServiceTest {
 	}
 
 	static class ArgsMatchersTest implements ArgumentMatcher<Long> {
-
 		private Long argument;
-
+		
 		@Override
 		public boolean matches(Long argument) {
 			this.argument = argument;
