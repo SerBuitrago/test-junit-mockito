@@ -8,6 +8,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -129,7 +131,7 @@ public class QuizServiceTest {
 		}
 
 		@Test
-		@DisplayName("Registra un quiz")
+		@DisplayName("Registra un quiz.")
 		void save() {
 			Quiz quiz = iQuizService.save(DATA_QUIZ);
 
@@ -138,6 +140,19 @@ public class QuizServiceTest {
 
 			verify(iQuizRepository).save(any(Quiz.class));
 			verify(iQuestionRepository).save(anyList());
+		}
+		
+		@Test
+		@DisplayName("Registra un quiz con times y never de verify.")
+		void saveTimesAndNever() {
+			Quiz quiz = iQuizService.save(DATA_QUIZ);
+
+			assertNotNull(quiz);
+			assertEquals(DATA_LIST_QUIZ.get(DATA_LIST_QUIZ.size() - 1).getId(), quiz.getId());
+
+			verify(iQuizRepository, never()).findAll();
+			verify(iQuizRepository, times(1)).save(any(Quiz.class));
+			verify(iQuestionRepository, times(1)).save(anyList());
 		}
 	}
 
