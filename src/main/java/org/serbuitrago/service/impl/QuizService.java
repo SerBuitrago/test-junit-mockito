@@ -7,10 +7,12 @@ import org.serbuitrago.model.Quiz;
 import org.serbuitrago.repository.IQuestionRepository;
 import org.serbuitrago.repository.IQuizRepository;
 import org.serbuitrago.service.IQuizService;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Service
 public class QuizService implements IQuizService {
 
 	private final IQuizRepository iQuizRepository;
