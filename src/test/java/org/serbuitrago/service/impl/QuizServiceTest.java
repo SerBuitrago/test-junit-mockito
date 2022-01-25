@@ -21,31 +21,29 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-//import org.mockito.MockitoAnnotations;
 import org.serbuitrago.model.Quiz;
 import org.serbuitrago.repository.IQuestionRepository;
 import org.serbuitrago.repository.IQuizRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.serbuitrago.Data.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class QuizServiceTest {
 
-	@Mock
+	@MockBean
 	IQuizRepository iQuizRepository;
-	@Mock
+	@MockBean
 	IQuestionRepository iQuestionRepository;
 
-	@InjectMocks
+	@Autowired
 	QuizService iQuizService;
 	
 	@Captor
